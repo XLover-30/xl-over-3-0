@@ -48,11 +48,14 @@ export const BrandShowcase: React.FC = () => {
           return (
             <div
               key={brand.id}
-              className="group relative rounded-3xl p-8 glass-card border border-purple-500/20 hover:border-purple-400/50 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-purple-900/30 flex flex-col justify-between overflow-hidden"
+              className="group relative rounded-3xl p-8 glass-bubble border border-purple-500/30 hover:border-purple-400/60 transition-all duration-500 hover:-translate-y-2.5 hover:shadow-2xl hover:shadow-purple-600/40 flex flex-col justify-between overflow-hidden cursor-pointer"
             >
+              {/* Line Art Grid Background Pattern */}
+              <div className="absolute inset-0 cyber-line-grid opacity-30 group-hover:opacity-60 transition-opacity duration-500 pointer-events-none" />
+
               {/* Subtle Card Background Gradient Overlay */}
               <div
-                className={`absolute inset-0 bg-gradient-to-b ${brand.visualTheme.gradient} opacity-20 group-hover:opacity-30 transition-opacity duration-500 pointer-events-none`}
+                className={`absolute inset-0 bg-gradient-to-b ${brand.visualTheme.gradient} opacity-25 group-hover:opacity-40 transition-opacity duration-500 pointer-events-none`}
               />
 
               <div className="relative z-10 space-y-6">

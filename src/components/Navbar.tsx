@@ -61,19 +61,21 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenPrivacy }) => {
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 sm:px-8 flex items-center justify-between">
-        {/* Brand Wordmark */}
+        {/* Brand Wordmark & Logo */}
         <a
           href="#hero"
           onClick={(e) => handleNavClick(e, '#hero')}
-          className="group flex items-center space-x-2 text-xl font-bold tracking-wider text-white"
+          className="group flex items-center space-x-3 text-xl font-bold tracking-wider text-white"
         >
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#A855F7] to-[#D8B4FE] flex items-center justify-center p-0.5 shadow-md shadow-purple-500/30 group-hover:scale-105 transition-transform duration-300">
-            <div className="w-full h-full bg-[#07060B] rounded-[6px] flex items-center justify-center">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-white font-black text-sm">XL</span>
-            </div>
+          <div className="relative w-10 h-10 rounded-xl overflow-hidden border border-purple-500/40 shadow-lg shadow-purple-600/30 group-hover:scale-105 group-hover:border-purple-400 transition-all duration-300">
+            <img
+              src="/favicon.png"
+              alt="XL Over Identity"
+              className="w-full h-full object-cover"
+            />
           </div>
           <span className="font-extrabold tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-white via-purple-100 to-purple-300 group-hover:to-purple-400 transition-colors">
-            XL <span className="text-[#A855F7] text-sm font-light">over 3.0</span>
+            XL <span className="text-[#A855F7] text-sm font-light">OVER 3.0</span>
           </span>
         </a>
 

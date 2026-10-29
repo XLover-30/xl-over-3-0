@@ -54,11 +54,15 @@ export const HeroSection: React.FC = () => {
           <span>{siteConfig.eyebrow}</span>
         </div>
 
-        {/* Headline */}
-        <div className="space-y-3">
-          <h1 className="text-5xl sm:text-7xl md:text-8xl font-black tracking-tight text-white uppercase drop-shadow-2xl">
-            <span className="chrome-text block">{siteConfig.headline}</span>
-          </h1>
+        {/* Transparent Banner Graphic & Headline */}
+        <div className="space-y-4 flex flex-col items-center">
+          <div className="w-full max-w-xl px-4 py-2 hover:scale-[1.02] transition-transform duration-500">
+            <img
+              src="/xl_over_banner.png"
+              alt="XL OVER 3.0 Banner"
+              className="w-full h-auto max-h-36 object-contain filter drop-shadow-[0_0_25px_rgba(168,85,247,0.5)]"
+            />
+          </div>
           <p className="text-2xl sm:text-3xl md:text-4xl font-extralight tracking-widest text-purple-200/90 font-mono">
             {siteConfig.tagline}
           </p>
