@@ -1,3 +1,27 @@
+export type WorldId = 'xl-over-3-0' | 'zoya-noor' | 'roohani-noorani';
+
+export interface WorldTheme {
+  id: WorldId;
+  name: string;
+  tagline: string;
+  subtitle: string;
+  description: string;
+  mood: string;
+  colors: {
+    background: string;
+    primary: string;
+    secondary: string;
+    accent: string;
+    highlight: string;
+    text: string;
+    particleColors: string[];
+    glowColor: string;
+    borderGlow: string;
+  };
+  characterPhoto: string;
+  badgeLabel: string;
+}
+
 export interface Brand {
   id: string;
   name: string;
@@ -9,7 +33,7 @@ export interface Brand {
     emblemIcon: string;
     badgeBg: string;
   };
-  url?: string; // Optional official destination URL
+  url?: string;
   isComingSoon: boolean;
 }
 
@@ -32,201 +56,169 @@ export interface SocialLink {
   label: string;
 }
 
-export interface SiteConfig {
-  brandName: string;
-  tagline: string;
-  eyebrow: string;
-  headline: string;
-  supportingText: string;
-  about: {
-    heading: string;
-    subheading: string;
-    paragraphs: string[];
-    pillars: Array<{
-      title: string;
-      description: string;
-    }>;
-  };
-  contact: {
-    heading: string;
-    supportingText: string;
-    businessEmailPlaceholder: string;
-    collaborationCategories: string[];
-  };
-  brands: Brand[];
-  featuredContent: FeaturedItem[];
-  socials: SocialLink[];
-}
+export const WORLD_THEMES: Record<WorldId, WorldTheme> = {
+  'xl-over-3-0': {
+    id: 'xl-over-3-0',
+    name: 'XL OVER 3.0',
+    tagline: 'ONE IDENTITY. MULTIPLE WORLDS.',
+    subtitle: 'THE DIGITAL UNIVERSE',
+    description: 'An extraordinary, premium, futuristic 3D digital universe where music, mindset, and digital expression unite under one central identity.',
+    mood: 'Futuristic, playful, mysterious, energetic',
+    colors: {
+      background: '#05030B',
+      primary: '#10061F',
+      secondary: '#8B35FF',
+      accent: '#B66BFF',
+      highlight: '#246BFF',
+      text: '#F8F5FF',
+      particleColors: ['#8B35FF', '#B66BFF', '#246BFF', '#65C7FF', '#F8F5FF'],
+      glowColor: 'rgba(139, 53, 255, 0.45)',
+      borderGlow: 'rgba(182, 107, 255, 0.35)',
+    },
+    characterPhoto: './XLover Photo.png',
+    badgeLabel: 'WORLD 01 — CENTRAL IDENTITY',
+  },
+  'zoya-noor': {
+    id: 'zoya-noor',
+    name: 'ZOYA NOOR',
+    tagline: 'THE MIND BEHIND THE MINDSET.',
+    subtitle: 'MOTIVATIONAL SPEAKER & MINDSET CREATOR',
+    description: 'Zoya Noor X is a motivational speaker who operates the Zoya Mindset content channel, empowering minds with psychology, emotional strength, and transformative clarity.',
+    mood: 'Premium, motivational, focused, elegant',
+    colors: {
+      background: '#050B08',
+      primary: '#071B13',
+      secondary: '#087A50',
+      accent: '#16B978',
+      highlight: '#C8A45D',
+      text: '#F7F1E5',
+      particleColors: ['#087A50', '#16B978', '#C8A45D', '#E4CA8A', '#F7F1E5'],
+      glowColor: 'rgba(22, 185, 120, 0.45)',
+      borderGlow: 'rgba(200, 164, 93, 0.4)',
+    },
+    characterPhoto: './Zoya Photo.png',
+    badgeLabel: 'WORLD 02 — PSYCHOLOGY & CLARITY',
+  },
+  'roohani-noorani': {
+    id: 'roohani-noorani',
+    name: 'ROOHANI NOORANI',
+    tagline: 'THE RHYTHM. THE ENERGY. THE EXPRESSION.',
+    subtitle: 'SINGER & DANCE PERFORMER',
+    description: 'Roohani Noorani is a singer and dance performer specializing in Bollywood-inspired pop, glam-pop, high-energy dance music and music videos.',
+    mood: 'Glamorous, romantic, musical, high-energy',
+    colors: {
+      background: '#090309',
+      primary: '#1B0617',
+      secondary: '#FF2D96',
+      accent: '#FF55B7',
+      highlight: '#C52B91',
+      text: '#FFF3FA',
+      particleColors: ['#FF2D96', '#FF55B7', '#C52B91', '#F08BC6', '#FFF3FA'],
+      glowColor: 'rgba(255, 45, 150, 0.45)',
+      borderGlow: 'rgba(255, 85, 183, 0.4)',
+    },
+    characterPhoto: './Roohani Photo.png',
+    badgeLabel: 'WORLD 03 — POP, DANCE & RHYTHM',
+  },
+};
 
-export const siteConfig: SiteConfig = {
+export const SOCIAL_LINKS = {
+  xlOver: [
+    {
+      platform: 'Facebook',
+      url: 'https://www.facebook.com/share/1DzEeQAfTC/',
+      handle: '@XLover-30',
+      description: 'Official XL OVER 3.0 community & announcements',
+    },
+    {
+      platform: 'Instagram',
+      url: 'https://www.instagram.com/xl_over_3.0?obrf=MmtjdGhvZHlhaGs0',
+      handle: '@xl_over_3.0',
+      description: 'Official digital universe updates & reels',
+    },
+  ],
+  zoyaNoor: {
+    personal: {
+      platform: 'Instagram (Personal)',
+      url: 'https://www.instagram.com/zoyanoor_x?mdxt=ZzZrcm5xN2pyZzRv',
+      handle: '@zoyanoor_x',
+      description: 'Personal lifestyle, keynote moments & philosophy',
+    },
+    mindsetFacebook: {
+      platform: 'Facebook (Zoya Mindset)',
+      url: 'https://www.facebook.com/share/1CAXHMMYj5/',
+      handle: 'Zoya Mindset Community',
+      description: 'Daily mindset insights, discipline & resilience',
+    },
+    mindsetInstagram: {
+      platform: 'Instagram (Zoya Mindset)',
+      url: 'https://www.instagram.com/zoya.mindset?obrf=cXl5MjY4dmtodWVy',
+      handle: '@zoya.mindset',
+      description: 'Psychology, motivation & emotional mastery videos',
+    },
+  },
+  roohaniNoorani: [
+    {
+      platform: 'YouTube',
+      url: 'https://youtube.com/@roohanirani?si=S_gZFn8-MfSdyM8v',
+      handle: '@roohanirani',
+      description: 'Official music videos, vocal releases & dance shorts',
+    },
+    {
+      platform: 'Instagram',
+      url: 'https://www.instagram.com/roohaninoorani?vrfl=MXB6bXJybnB4Yjg4cA==',
+      handle: '@roohaninoorani',
+      description: 'Live performance snippets, rehearsals & glam aesthetic',
+    },
+    {
+      platform: 'Facebook',
+      url: 'https://www.facebook.com/share/1CPHdmtTwd/',
+      handle: 'Roohani Noorani Official',
+      description: 'Music updates, concert tours & fan engagements',
+    },
+  ],
+};
+
+// Legacy siteConfig compatibility mapping
+export const siteConfig = {
   brandName: 'XL over 3.0',
-  tagline: 'One Identity. Multiple Worlds.',
+  tagline: 'ONE IDENTITY. MULTIPLE WORLDS.',
   eyebrow: 'THE DIGITAL UNIVERSE',
-  headline: 'XL over 3.0',
-  supportingText: 'A creative universe of music, mindset, entertainment, and digital experiences — connected by one independent identity.',
-
+  headline: 'XL OVER 3.0',
+  supportingText: 'An extraordinary, premium, futuristic 3D digital universe.',
   about: {
     heading: 'MORE THAN A NAME. A CREATIVE UNIVERSE.',
     subheading: 'A faceless central hub uniting distinct creative dimensions.',
     paragraphs: [
-      'XL over 3.0 is an independent digital identity connecting music, mindset, entertainment, and new creative possibilities. Each brand has its own voice, purpose, and audience, while sharing one central digital home.',
-      'Designed with futuristic precision and luxury artistry, XL over 3.0 serves as an expansive ecosystem where music composition, psychological personal growth, and digital entertainment converge.'
+      'XL OVER 3.0 is an independent digital identity connecting music, mindset, and digital entertainment across distinct digital dimensions.',
     ],
     pillars: [
       {
         title: 'Central Identity',
-        description: 'A unified digital architecture powering multiple distinct, autonomous brands.'
+        description: 'A unified digital architecture powering multiple distinct, autonomous brands.',
       },
       {
         title: 'Faceless Persona',
-        description: 'Focusing entirely on artistic expression, high-level production, and transformative content.'
+        description: 'Focusing entirely on artistic expression, high-level production, and transformative content.',
       },
       {
         title: 'Infinite Possibilities',
-        description: 'Constantly expanding into new creative mediums, digital channels, and media formats.'
-      }
-    ]
+        description: 'Constantly expanding into new creative mediums, digital channels, and media formats.',
+      },
+    ],
   },
-
   contact: {
     heading: "LET'S CREATE SOMETHING EXTRAORDINARY.",
-    supportingText: 'For business enquiries, brand collaborations, music projects, and creative partnerships, get in touch.',
-    businessEmailPlaceholder: 'YOUR_BUSINESS_EMAIL@domain.com',
+    supportingText: 'For brand collaborations, music projects, and creative partnerships, get in touch.',
+    businessEmailPlaceholder: 'contact@xlover30.com',
     collaborationCategories: [
       'Business Enquiries',
       'Brand Collaborations',
       'Music & Creative Projects',
-      'Media & Press'
-    ]
+      'Media & Press',
+    ],
   },
-
-  brands: [
-    {
-      id: 'roohani-noorani',
-      name: 'ROOHANI NOORANI',
-      category: 'Music & Entertainment',
-      description: 'Original music, Desi Glam-Pop, cinematic performances, and digital music experiences.',
-      visualTheme: {
-        accentColor: '#EC4899', // Magenta/pink accent
-        gradient: 'from-pink-900/40 via-purple-950/60 to-black',
-        emblemIcon: 'Music2',
-        badgeBg: 'bg-pink-500/20 text-pink-300 border-pink-500/30'
-      },
-      url: undefined, // Configurable link
-      isComingSoon: true
-    },
-    {
-      id: 'rohani-rani',
-      name: 'ROHANI RANI',
-      category: 'Music & Entertainment',
-      description: 'A dedicated creative identity for music and entertainment content.',
-      visualTheme: {
-        accentColor: '#8B5CF6', // Purple/violet
-        gradient: 'from-violet-900/40 via-purple-950/60 to-black',
-        emblemIcon: 'Sparkles',
-        badgeBg: 'bg-violet-500/20 text-violet-300 border-violet-500/30'
-      },
-      url: undefined,
-      isComingSoon: true
-    },
-    {
-      id: 'zoya-noor-x',
-      name: 'ZOYA NOOR X',
-      category: 'Creative & Lifestyle',
-      description: 'A separate creative channel and digital identity.',
-      visualTheme: {
-        accentColor: '#38BDF8', // Sky/cyan accent
-        gradient: 'from-sky-900/40 via-indigo-950/60 to-black',
-        emblemIcon: 'Compass',
-        badgeBg: 'bg-sky-500/20 text-sky-300 border-sky-500/30'
-      },
-      url: undefined,
-      isComingSoon: true
-    },
-    {
-      id: 'zoya-mindset',
-      name: 'ZOYA MINDSET',
-      category: 'Psychology & Motivation',
-      description: 'Psychology-inspired motivational content focused on mindset, self-respect, emotional growth, and personal development.',
-      visualTheme: {
-        accentColor: '#A855F7', // Deep Violet & midnight blue
-        gradient: 'from-purple-900/40 via-blue-950/60 to-black',
-        emblemIcon: 'Brain',
-        badgeBg: 'bg-purple-500/20 text-purple-300 border-purple-500/30'
-      },
-      url: undefined,
-      isComingSoon: true
-    },
-    {
-      id: 'youtube-other-projects',
-      name: 'YOUTUBE & OTHER PROJECTS',
-      category: 'Digital Media',
-      description: 'A gateway to additional official channels, creative experiments, and future projects.',
-      visualTheme: {
-        accentColor: '#F43F5E', // Rose/Red
-        gradient: 'from-rose-900/40 via-purple-950/60 to-black',
-        emblemIcon: 'Youtube',
-        badgeBg: 'bg-rose-500/20 text-rose-300 border-rose-500/30'
-      },
-      url: undefined,
-      isComingSoon: true
-    }
-  ],
-
-  featuredContent: [
-    {
-      id: 'feat-1',
-      title: 'Desi Glam-Pop Audio Teaser',
-      category: 'Music & Audio',
-      brandName: 'ROOHANI NOORANI',
-      description: 'Upcoming original single blending traditional synth harmonies with contemporary glam-pop rhythms.',
-      isPlaceholder: true,
-      type: 'music'
-    },
-    {
-      id: 'feat-2',
-      title: 'Mindset & Emotional Growth Series',
-      category: 'Psychology',
-      brandName: 'ZOYA MINDSET',
-      description: 'Key insights on building unwavering self-respect, boundaries, and intrinsic motivation.',
-      isPlaceholder: true,
-      type: 'article'
-    },
-    {
-      id: 'feat-3',
-      title: 'Cinematic Visual Identity Premiere',
-      category: 'Creative Production',
-      brandName: 'ZOYA NOOR X',
-      description: 'An exploration of digital aesthetics, futuristic visual art, and immersive storytelling.',
-      isPlaceholder: true,
-      type: 'video'
-    }
-  ],
-
-  socials: [
-    {
-      platform: 'YouTube',
-      url: undefined,
-      iconName: 'Youtube',
-      label: 'YouTube Channel'
-    },
-    {
-      platform: 'Instagram',
-      url: undefined,
-      iconName: 'Instagram',
-      label: 'Instagram Profile'
-    },
-    {
-      platform: 'Spotify',
-      url: undefined,
-      iconName: 'Radio',
-      label: 'Spotify Artist Page'
-    },
-    {
-      platform: 'X / Twitter',
-      url: undefined,
-      iconName: 'Twitter',
-      label: 'X (Twitter) Profile'
-    }
-  ]
+  brands: [] as Brand[],
+  featuredContent: [] as FeaturedItem[],
+  socials: [] as SocialLink[],
 };
