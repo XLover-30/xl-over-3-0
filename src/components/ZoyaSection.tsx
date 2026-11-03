@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Compass, Sparkles, ArrowDown, ExternalLink, Lightbulb, Target } from 'lucide-react';
+import { Compass, ArrowDown, ExternalLink, Lightbulb, Target } from 'lucide-react';
 import { FacebookIcon, InstagramIcon } from './SocialIcons';
 import { SOCIAL_LINKS } from '../config/siteConfig';
 
@@ -16,12 +16,12 @@ export const ZoyaSection: React.FC = () => {
     <section
       id="zoya-noor"
       className="relative min-h-screen w-full flex flex-col justify-between items-center px-4 sm:px-6 lg:px-12 pt-28 pb-16 z-10"
-      aria-label="Zoya Noor Universe"
+      aria-label="Zoya Noor Identity"
     >
       {/* Background emerald and gold ambient light */}
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[340px] sm:w-[620px] h-[340px] sm:h-[620px] bg-gradient-to-tr from-[#087A50]/20 via-[#C8A45D]/15 to-transparent rounded-full blur-[130px] pointer-events-none -z-10" />
 
-      {/* Top Header Eyebrow & Brand Title */}
+      {/* Brand Title Block */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -29,10 +29,6 @@ export const ZoyaSection: React.FC = () => {
         transition={{ duration: 1 }}
         className="text-center max-w-3xl mx-auto mb-6"
       >
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#087A50]/40 bg-[#071B13]/80 backdrop-blur-md text-xs sm:text-sm font-semibold tracking-widest text-[#16B978] uppercase mb-4 shadow-[0_0_20px_rgba(22,185,120,0.25)]">
-          <Sparkles className="w-3.5 h-3.5 text-[#C8A45D] animate-pulse" />
-          <span>WORLD 02 — MOTIVATION & PSYCHOLOGY</span>
-        </div>
         <h2 className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white mb-2 font-display">
           ZOYA <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#16B978] via-[#C8A45D] to-[#F7F1E5] drop-shadow-[0_0_25px_rgba(22,185,120,0.6)]">NOOR</span>
         </h2>
@@ -190,15 +186,15 @@ export const ZoyaSection: React.FC = () => {
             </div>
           </div>
 
-          {/* Quick World Switcher to World 03 */}
-          <div className="p-5 rounded-2xl bg-[#071B13]/60 border border-[#087A50]/30 backdrop-blur-xl">
-            <div className="text-xs uppercase font-bold tracking-widest text-[#16B978] mb-2">Next Destination</div>
+          {/* Quick Switcher to Roohani Noorani */}
+          <div className="p-5 rounded-2xl bg-[#071B13]/60 border border-[#087A50]/30 backdrop-blur-xl shadow-[0_8px_32px_0_rgba(8,122,80,0.2)]">
+            <div className="text-xs uppercase font-bold tracking-widest text-[#16B978] mb-2">Next Atmosphere</div>
             <p className="text-xs text-slate-300 leading-relaxed mb-4">
               Step into the rhythmic, musical, glam-pop world of Roohani Noorani.
             </p>
             <button
               onClick={scrollToNext}
-              className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#087A50] to-[#C8A45D] text-white text-xs font-bold tracking-wider uppercase hover:opacity-95 transition-opacity shadow-[0_0_20px_rgba(8,122,80,0.5)] cursor-pointer"
+              className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#087A50] to-[#C8A45D] text-white text-xs font-bold tracking-wider uppercase hover:opacity-95 transition-all shadow-[0_0_20px_rgba(8,122,80,0.5)] cursor-pointer hover:shadow-[0_0_25px_rgba(200,164,93,0.6)]"
             >
               <span>Discover Roohani Noorani</span>
               <ArrowDown className="w-4 h-4 animate-bounce" />
@@ -206,17 +202,6 @@ export const ZoyaSection: React.FC = () => {
           </div>
         </motion.div>
       </div>
-
-      {/* Bottom Scroll Cue */}
-      <motion.div
-        animate={{ y: [0, 8, 0] }}
-        transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
-        className="mt-8 flex flex-col items-center gap-2 cursor-pointer text-slate-400 hover:text-white transition-colors"
-        onClick={scrollToNext}
-      >
-        <span className="text-[11px] uppercase tracking-[0.25em] font-semibold text-slate-400">Proceed to World 03</span>
-        <ArrowDown className="w-4 h-4 text-[#16B978]" />
-      </motion.div>
     </section>
   );
 };

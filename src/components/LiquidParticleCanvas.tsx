@@ -3,7 +3,7 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import { useTheme } from '../context/useTheme';
 
-// GLSL Vertex Shader for Flowing Liquid Particles & Double Helices
+// Advanced GLSL Vertex Shader for Organic 3D Liquid Particle Formations & Luminous Ribbons
 const particleVertexShader = `
   uniform float uTime;
   uniform float uScroll;
@@ -12,14 +12,15 @@ const particleVertexShader = `
   uniform float uDpr;
 
   attribute float aScale;
-  attribute float aHelixOffset;
+  attribute float aPhase;
   attribute float aLayer;
+  attribute float aSpeed;
 
   varying vec3 vColor;
   varying float vAlpha;
   varying float vDist;
 
-  // Simplex-like 3D noise approximation
+  // Optimized Simplex 3D noise
   vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
   vec4 mod289(vec4 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
   vec4 permute(vec4 x) { return mod289(((x*34.0)+1.0)*x); }
@@ -71,92 +72,122 @@ const particleVertexShader = `
     return 42.0 * dot(m*m, vec4(dot(p0,x0), dot(p1,x1), dot(p2,x2), dot(p3,x3)));
   }
 
-  uniform vec3 uColorTheme1A;
-  uniform vec3 uColorTheme1B;
-  uniform vec3 uColorTheme2A;
-  uniform vec3 uColorTheme2B;
-  uniform vec3 uColorTheme3A;
-  uniform vec3 uColorTheme3B;
+  // Identity Color Uniforms
+  uniform vec3 uColorTheme1Primary;    // #8B35FF Electric Purple
+  uniform vec3 uColorTheme1Secondary;  // #B66BFF Neon Violet
+  uniform vec3 uColorTheme1Accent;     // #246BFF Electric Blue
+  uniform vec3 uColorTheme1Highlight;  // #65C7FF Ice Blue
+
+  uniform vec3 uColorTheme2Primary;    // #087A50 Emerald
+  uniform vec3 uColorTheme2Secondary;  // #16B978 Bright Green
+  uniform vec3 uColorTheme2Accent;     // #C8A45D Champagne Gold
+  uniform vec3 uColorTheme2Highlight;  // #E4CA8A Soft Gold
+
+  uniform vec3 uColorTheme3Primary;    // #FF2D96 Hot Pink
+  uniform vec3 uColorTheme3Secondary;  // #FF55B7 Neon Pink
+  uniform vec3 uColorTheme3Accent;     // #C52B91 Magenta
+  uniform vec3 uColorTheme3Highlight;  // #F08BC6 Rose
 
   void main() {
     vec3 pos = position;
+    float t = uTime * (0.35 * aSpeed);
 
-    // Organic ribbon motion and double helix twisting
-    float t = uTime * 0.45;
-    float helixRadius = 3.5 + sin(pos.y * 0.4 + t) * 1.5;
-    float helixAngle = pos.y * 0.65 + aHelixOffset + t * 0.8;
+    // Dynamic Twisted Ribbons & Double Helix Formations
+    float ribbonAngle = pos.y * 0.45 + aPhase + t * 0.7;
+    float ribbonRadius = 4.2 + sin(pos.y * 0.35 + t) * 2.0;
 
-    // Morph shapes according to active world
+    // Formation 1: Electric Fluid Vortex (XL OVER 3.0)
     vec3 shape0 = vec3(
-      pos.x + sin(pos.y * 0.5 + t) * 2.2 + cos(pos.z * 0.3 + t * 0.7) * 1.5,
-      pos.y + cos(pos.x * 0.4 + t * 0.5) * 1.2,
-      pos.z + sin(pos.x * 0.3 + t * 0.6) * 2.0
+      cos(ribbonAngle) * ribbonRadius + sin(pos.z * 0.3 + t * 0.8) * 1.8,
+      pos.y + sin(pos.x * 0.4 + t * 0.6) * 1.5,
+      sin(ribbonAngle) * ribbonRadius + cos(pos.x * 0.3 + t * 0.7) * 2.0
     );
 
+    // Formation 2: Flowing Emerald Waves (ZOYA NOOR)
+    float waveX = pos.x * 0.35 + t * 0.5;
     vec3 shape1 = vec3(
-      cos(helixAngle) * helixRadius + sin(pos.y * 0.3 + t) * 1.2,
-      pos.y + sin(helixAngle * 2.0) * 0.8,
-      sin(helixAngle) * helixRadius + cos(pos.y * 0.2 + t) * 1.2
+      pos.x + sin(pos.y * 0.5 + t) * 2.5,
+      pos.y + cos(waveX) * 2.5 + sin(pos.z * 0.4 + t) * 1.5,
+      pos.z + sin(waveX * 1.2) * (ribbonRadius * 0.9)
     );
 
+    // Formation 3: Dynamic Pulsing Sphere & Rings (ROOHANI NOORANI)
+    float ringAngle = pos.y * 0.8 + aPhase * 2.0 + t;
+    float ringR = 5.0 + sin(pos.y * 0.6 + t * 1.5) * 2.2;
     vec3 shape2 = vec3(
-      sin(helixAngle * 1.5 + t) * (helixRadius * 1.3),
-      pos.y + sin(pos.x * 0.8 + t * 1.8) * 1.6,
-      cos(helixAngle * 1.5 + t) * (helixRadius * 1.3)
+      cos(ringAngle) * ringR + sin(pos.z * 0.5 + t) * 1.4,
+      pos.y + sin(ringAngle * 2.0 + t) * 2.0,
+      sin(ringAngle) * ringR + cos(pos.x * 0.5 + t) * 1.4
     );
 
-    // Continuous smooth morph based on uMorph
+    // Continuous morph between the 3 formations based on uMorph
     vec3 morphedPos;
     if (uMorph < 1.0) {
-      morphedPos = mix(shape0, shape1, uMorph);
+      morphedPos = mix(shape0, shape1, smoothstep(0.0, 1.0, uMorph));
     } else {
-      morphedPos = mix(shape1, shape2, uMorph - 1.0);
+      morphedPos = mix(shape1, shape2, smoothstep(1.0, 2.0, uMorph));
     }
 
-    // Turbulence via 3D noise
-    float noise = snoise(morphedPos * 0.18 + vec3(0.0, t * 0.3, 0.0));
-    morphedPos += normalize(morphedPos + vec3(0.001)) * (noise * 1.35);
+    // Organic 3D Simplex noise turbulence
+    float noise = snoise(morphedPos * 0.16 + vec3(0.0, t * 0.25, 0.0));
+    morphedPos += normalize(morphedPos + vec3(0.001)) * (noise * 1.6);
 
-    // Mouse and touch interactive displacement
+    // Touch and mouse magnetic interaction & repulsion ripple
     vec2 screenPos = vec2(morphedPos.x, morphedPos.y);
-    float distToMouse = length(screenPos - uMouse * 8.0);
-    float mouseRepel = smoothstep(5.0, 0.0, distToMouse);
-    morphedPos.xy += normalize(screenPos - uMouse * 8.0 + vec2(0.001)) * (mouseRepel * 2.5);
+    vec2 mouseDelta = screenPos - uMouse * 8.5;
+    float distToMouse = length(mouseDelta);
+    float mouseRepel = smoothstep(6.0, 0.0, distToMouse);
+    morphedPos.xy += normalize(mouseDelta + vec2(0.001)) * (mouseRepel * 3.2);
 
-    // Scroll reactive depth push
-    morphedPos.y -= (uScroll - 0.5) * 14.0;
+    // Scroll reactive depth movement
+    morphedPos.y -= (uScroll - 0.5) * 16.0;
 
     vec4 mvPosition = modelViewMatrix * vec4(morphedPos, 1.0);
     gl_Position = projectionMatrix * mvPosition;
 
-    // Perspective point size calculation
-    float sizeFactor = (aScale * 38.0 * uDpr) / -mvPosition.z;
-    gl_PointSize = clamp(sizeFactor, 1.5, 45.0);
+    // Point size calculation with distance attenuation & DPR
+    float sizeFactor = (aScale * 42.0 * uDpr) / -mvPosition.z;
+    gl_PointSize = clamp(sizeFactor, 1.5, 48.0);
 
-    // Dynamic color gradient selection
-    vec3 c1 = mix(uColorTheme1A, uColorTheme1B, sin(pos.y * 0.3 + t) * 0.5 + 0.5);
-    vec3 c2 = mix(uColorTheme2A, uColorTheme2B, cos(pos.y * 0.3 + t) * 0.5 + 0.5);
-    vec3 c3 = mix(uColorTheme3A, uColorTheme3B, sin(pos.x * 0.4 + t) * 0.5 + 0.5);
+    // Seamless Color Blending across palettes
+    float colorT = sin(pos.y * 0.3 + pos.x * 0.2 + t) * 0.5 + 0.5;
+    vec3 cTheme1 = mix(
+      mix(uColorTheme1Primary, uColorTheme1Secondary, colorT),
+      mix(uColorTheme1Accent, uColorTheme1Highlight, colorT),
+      sin(pos.z * 0.25 + t * 0.5) * 0.5 + 0.5
+    );
+
+    vec3 cTheme2 = mix(
+      mix(uColorTheme2Primary, uColorTheme2Secondary, colorT),
+      mix(uColorTheme2Accent, uColorTheme2Highlight, colorT),
+      sin(pos.z * 0.25 + t * 0.5) * 0.5 + 0.5
+    );
+
+    vec3 cTheme3 = mix(
+      mix(uColorTheme3Primary, uColorTheme3Secondary, colorT),
+      mix(uColorTheme3Accent, uColorTheme3Highlight, colorT),
+      sin(pos.z * 0.25 + t * 0.5) * 0.5 + 0.5
+    );
 
     vec3 finalColor;
     if (uMorph < 1.0) {
-      finalColor = mix(c1, c2, uMorph);
+      finalColor = mix(cTheme1, cTheme2, smoothstep(0.0, 1.0, uMorph));
     } else {
-      finalColor = mix(c2, c3, uMorph - 1.0);
+      finalColor = mix(cTheme2, cTheme3, smoothstep(1.0, 2.0, uMorph));
     }
 
-    // Highlight outer layer
+    // Multiple particle depth layers boost
     if (aLayer > 1.5) {
-      finalColor += vec3(0.18, 0.18, 0.22);
+      finalColor += vec3(0.2, 0.2, 0.25);
     }
 
     vColor = finalColor;
     vDist = -mvPosition.z;
-    vAlpha = clamp(1.0 - (vDist / 42.0), 0.15, 0.95);
+    vAlpha = clamp(1.0 - (vDist / 45.0), 0.2, 0.98);
   }
 `;
 
-// GLSL Fragment Shader for Luminous Soft Radial Particles
+// GLSL Fragment Shader for Luminous Soft Radial Particle Glow
 const particleFragmentShader = `
   varying vec3 vColor;
   varying float vAlpha;
@@ -167,46 +198,47 @@ const particleFragmentShader = `
     if (dist > 0.5) discard;
 
     float strength = 1.0 - (dist * 2.0);
-    strength = pow(strength, 1.8);
+    strength = pow(strength, 1.7);
 
     vec3 glow = vColor + vec3(0.35) * pow(strength, 3.0);
     gl_FragColor = vec4(glow, strength * vAlpha);
   }
 `;
 
-// Deterministic pseudo-random generator
 function seededRandom(seed: number): number {
   const x = Math.sin(seed++) * 10000;
   return x - Math.floor(x);
 }
 
-// Pre-generate particle buffers
 function createParticleBuffers(count: number) {
   const pos = new Float32Array(count * 3);
   const sc = new Float32Array(count);
-  const hOff = new Float32Array(count);
+  const phase = new Float32Array(count);
   const lay = new Float32Array(count);
+  const spd = new Float32Array(count);
 
   for (let i = 0; i < count; i++) {
     const layer = i % 3;
-    const t = (i / count) * Math.PI * 18;
-    const r1 = seededRandom(i * 3 + 1);
-    const r2 = seededRandom(i * 3 + 2);
-    const r3 = seededRandom(i * 3 + 3);
+    const t = (i / count) * Math.PI * 22;
+    const r1 = seededRandom(i * 4 + 1);
+    const r2 = seededRandom(i * 4 + 2);
+    const r3 = seededRandom(i * 4 + 3);
+    const r4 = seededRandom(i * 4 + 4);
 
-    const spreadX = (Math.sin(t * 0.8) + (r1 - 0.5) * 1.8) * 8.0;
-    const spreadY = (i / count - 0.5) * 40.0;
-    const spreadZ = (Math.cos(t * 0.6) + (r2 - 0.5) * 1.8) * 7.0;
+    const spreadX = (Math.sin(t * 0.7) + (r1 - 0.5) * 2.0) * 8.5;
+    const spreadY = (i / count - 0.5) * 44.0;
+    const spreadZ = (Math.cos(t * 0.5) + (r2 - 0.5) * 2.0) * 8.0;
 
     pos[i * 3 + 0] = spreadX;
     pos[i * 3 + 1] = spreadY;
     pos[i * 3 + 2] = spreadZ;
 
-    sc[i] = r3 * 0.7 + 0.3;
-    hOff[i] = (i % 2 === 0 ? 0 : Math.PI) + (r1 - 0.5) * 0.4;
+    sc[i] = r3 * 0.75 + 0.35;
+    phase[i] = (i % 2 === 0 ? 0 : Math.PI) + (r1 - 0.5) * 0.5;
     lay[i] = layer;
+    spd[i] = 0.8 + r4 * 0.4;
   }
-  return { pos, sc, hOff, lay };
+  return { pos, sc, phase, lay, spd };
 }
 
 interface ParticlesMeshProps {
@@ -237,11 +269,26 @@ const ParticlesMesh: React.FC<ParticlesMeshProps> = ({ particleCount }) => {
       mouseTarget.current.y = y * (viewport.height / 2);
     };
 
+    const handleTouchMove = (e: TouchEvent) => {
+      if (e.touches.length > 0) {
+        const touch = e.touches[0];
+        const x = (touch.clientX / window.innerWidth) * 2 - 1;
+        const y = -(touch.clientY / window.innerHeight) * 2 + 1;
+        mouseTarget.current.x = x * (viewport.width / 2);
+        mouseTarget.current.y = y * (viewport.height / 2);
+      }
+    };
+
     window.addEventListener('pointermove', handlePointerMove, { passive: true });
-    return () => window.removeEventListener('pointermove', handlePointerMove);
+    window.addEventListener('touchmove', handleTouchMove, { passive: true });
+
+    return () => {
+      window.removeEventListener('pointermove', handlePointerMove);
+      window.removeEventListener('touchmove', handleTouchMove);
+    };
   }, [viewport.width, viewport.height]);
 
-  const { pos, sc, hOff, lay } = useMemo(() => createParticleBuffers(particleCount), [particleCount]);
+  const { pos, sc, phase, lay, spd } = useMemo(() => createParticleBuffers(particleCount), [particleCount]);
 
   const uniforms = useMemo(
     () => ({
@@ -250,12 +297,21 @@ const ParticlesMesh: React.FC<ParticlesMeshProps> = ({ particleCount }) => {
       uMouse: { value: new THREE.Vector2(0, 0) },
       uMorph: { value: 0 },
       uDpr: { value: Math.min(window.devicePixelRatio || 1, 2) },
-      uColorTheme1A: { value: new THREE.Color('#8B35FF') },
-      uColorTheme1B: { value: new THREE.Color('#246BFF') },
-      uColorTheme2A: { value: new THREE.Color('#16B978') },
-      uColorTheme2B: { value: new THREE.Color('#C8A45D') },
-      uColorTheme3A: { value: new THREE.Color('#FF2D96') },
-      uColorTheme3B: { value: new THREE.Color('#F08BC6') },
+      // XL OVER 3.0
+      uColorTheme1Primary: { value: new THREE.Color('#8B35FF') },
+      uColorTheme1Secondary: { value: new THREE.Color('#B66BFF') },
+      uColorTheme1Accent: { value: new THREE.Color('#246BFF') },
+      uColorTheme1Highlight: { value: new THREE.Color('#65C7FF') },
+      // ZOYA NOOR
+      uColorTheme2Primary: { value: new THREE.Color('#087A50') },
+      uColorTheme2Secondary: { value: new THREE.Color('#16B978') },
+      uColorTheme2Accent: { value: new THREE.Color('#C8A45D') },
+      uColorTheme2Highlight: { value: new THREE.Color('#E4CA8A') },
+      // ROOHANI NOORANI
+      uColorTheme3Primary: { value: new THREE.Color('#FF2D96') },
+      uColorTheme3Secondary: { value: new THREE.Color('#FF55B7') },
+      uColorTheme3Accent: { value: new THREE.Color('#C52B91') },
+      uColorTheme3Highlight: { value: new THREE.Color('#F08BC6') },
     }),
     []
   );
@@ -264,7 +320,7 @@ const ParticlesMesh: React.FC<ParticlesMeshProps> = ({ particleCount }) => {
     if (!pointsRef.current) return;
     const mat = pointsRef.current.material as THREE.ShaderMaterial;
 
-    const dt = Math.min(delta, 0.1);
+    const dt = Math.min(delta, 0.08);
     mat.uniforms.uTime.value += dt;
     mat.uniforms.uScroll.value = scrollProgress;
 
@@ -272,11 +328,11 @@ const ParticlesMesh: React.FC<ParticlesMeshProps> = ({ particleCount }) => {
     currentMouse.current.y += (mouseTarget.current.y - currentMouse.current.y) * 0.08;
     mat.uniforms.uMouse.value.set(currentMouse.current.x, currentMouse.current.y);
 
-    currentMorph.current += (targetMorph.current - currentMorph.current) * 0.05;
+    currentMorph.current += (targetMorph.current - currentMorph.current) * 0.045;
     mat.uniforms.uMorph.value = currentMorph.current;
 
-    pointsRef.current.rotation.y += dt * 0.04;
-    pointsRef.current.rotation.x = Math.sin(mat.uniforms.uTime.value * 0.2) * 0.05;
+    pointsRef.current.rotation.y += dt * 0.035;
+    pointsRef.current.rotation.x = Math.sin(mat.uniforms.uTime.value * 0.18) * 0.04;
   });
 
   return (
@@ -284,8 +340,9 @@ const ParticlesMesh: React.FC<ParticlesMeshProps> = ({ particleCount }) => {
       <bufferGeometry>
         <bufferAttribute attach="attributes-position" args={[pos, 3]} />
         <bufferAttribute attach="attributes-aScale" args={[sc, 1]} />
-        <bufferAttribute attach="attributes-aHelixOffset" args={[hOff, 1]} />
+        <bufferAttribute attach="attributes-aPhase" args={[phase, 1]} />
         <bufferAttribute attach="attributes-aLayer" args={[lay, 1]} />
+        <bufferAttribute attach="attributes-aSpeed" args={[spd, 1]} />
       </bufferGeometry>
       <shaderMaterial
         vertexShader={particleVertexShader}
@@ -302,10 +359,12 @@ const ParticlesMesh: React.FC<ParticlesMeshProps> = ({ particleCount }) => {
 export const LiquidParticleCanvas: React.FC = () => {
   const { quality, reducedMotion, activeWorld } = useTheme();
 
+  // Optimized particle count based on quality setting & mobile checks
   const count = useMemo(() => {
-    if (quality === 'low') return 3500;
-    if (quality === 'medium') return 7000;
-    return 14000;
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+    if (quality === 'low') return isMobile ? 2200 : 3500;
+    if (quality === 'medium') return isMobile ? 4500 : 7000;
+    return isMobile ? 8000 : 13000;
   }, [quality]);
 
   if (reducedMotion) {
@@ -315,10 +374,10 @@ export const LiquidParticleCanvas: React.FC = () => {
         style={{
           background:
             activeWorld === 'xl-over-3-0'
-              ? 'radial-gradient(ellipse at 50% 40%, rgba(139, 53, 255, 0.2) 0%, rgba(5, 3, 11, 0.95) 80%)'
+              ? 'radial-gradient(ellipse at 50% 40%, rgba(139, 53, 255, 0.22) 0%, rgba(5, 3, 11, 0.96) 80%)'
               : activeWorld === 'zoya-noor'
-              ? 'radial-gradient(ellipse at 50% 40%, rgba(8, 122, 80, 0.2) 0%, rgba(5, 11, 8, 0.95) 80%)'
-              : 'radial-gradient(ellipse at 50% 40%, rgba(255, 45, 150, 0.2) 0%, rgba(9, 3, 9, 0.95) 80%)',
+              ? 'radial-gradient(ellipse at 50% 40%, rgba(8, 122, 80, 0.22) 0%, rgba(5, 11, 8, 0.96) 80%)'
+              : 'radial-gradient(ellipse at 50% 40%, rgba(255, 45, 150, 0.22) 0%, rgba(9, 3, 9, 0.96) 80%)',
         }}
       />
     );
@@ -328,7 +387,7 @@ export const LiquidParticleCanvas: React.FC = () => {
     <div className="fixed inset-0 pointer-events-none z-0">
       <Canvas
         camera={{ position: [0, 0, 15], fov: 60, near: 0.1, far: 100 }}
-        dpr={[1, 2]}
+        dpr={[1, Math.min(typeof window !== 'undefined' ? window.devicePixelRatio : 1, 2)]}
         gl={{
           antialias: quality === 'high',
           powerPreference: 'high-performance',
