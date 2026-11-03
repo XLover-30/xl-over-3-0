@@ -6,7 +6,12 @@ import { SOCIAL_LINKS } from '../config/siteConfig';
 
 export const RoohaniSection: React.FC = () => {
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    const el = document.getElementById('xl-over-3-0');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   const contentPanels = [
@@ -40,12 +45,12 @@ export const RoohaniSection: React.FC = () => {
     <section
       id="roohani-noorani"
       className="relative min-h-screen w-full flex flex-col justify-between items-center px-4 sm:px-6 lg:px-12 pt-28 pb-16 z-10"
-      aria-label="Roohani Noorani Universe"
+      aria-label="Roohani Noorani Identity"
     >
       {/* Background hot pink and magenta ambient light */}
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[340px] sm:w-[620px] h-[340px] sm:h-[620px] bg-gradient-to-tr from-[#FF2D96]/20 via-[#C52B91]/15 to-transparent rounded-full blur-[130px] pointer-events-none -z-10" />
 
-      {/* Top Header Eyebrow & Brand Title */}
+      {/* Brand Title Block */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -53,10 +58,6 @@ export const RoohaniSection: React.FC = () => {
         transition={{ duration: 1 }}
         className="text-center max-w-3xl mx-auto mb-6"
       >
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#FF2D96]/40 bg-[#1B0617]/80 backdrop-blur-md text-xs sm:text-sm font-semibold tracking-widest text-[#FF55B7] uppercase mb-4 shadow-[0_0_20px_rgba(255,45,150,0.25)]">
-          <Sparkles className="w-3.5 h-3.5 text-[#F08BC6] animate-pulse" />
-          <span>WORLD 03 — MUSIC & DANCE SPECTACLE</span>
-        </div>
         <h2 className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white mb-2 font-display">
           ROOHANI <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF2D96] via-[#FF55B7] to-[#FFF3FA] drop-shadow-[0_0_25px_rgba(255,45,150,0.6)]">NOORANI</span>
         </h2>
@@ -156,7 +157,7 @@ export const RoohaniSection: React.FC = () => {
           })}
 
           {/* Social Channels Hub */}
-          <div className="p-5 rounded-2xl bg-[#1B0617]/70 border border-[#FF2D96]/40 backdrop-blur-xl">
+          <div className="p-5 rounded-2xl bg-[#1B0617]/70 border border-[#FF2D96]/40 backdrop-blur-xl shadow-[0_8px_32px_0_rgba(255,45,150,0.2)]">
             <h4 className="text-xs uppercase font-bold tracking-widest text-[#FF55B7] mb-3">Official Media Channels</h4>
             <div className="flex flex-col gap-2.5">
               {SOCIAL_LINKS.roohaniNoorani.map((s) => (
