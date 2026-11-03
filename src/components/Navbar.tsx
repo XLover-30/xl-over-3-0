@@ -1,158 +1,160 @@
-import React, { useState, useEffect } from 'react';
-import { Menu, X, Sparkles } from 'lucide-react';
+import React, { useState } from 'react';
+import { Sparkles, Sliders, Eye, EyeOff } from 'lucide-react';
+import { useTheme } from '../context/useTheme';
+import type { WorldId } from '../config/siteConfig';
 
-interface NavbarProps {
-  onOpenPrivacy: () => void;
-}
+export const Navbar: React.FC = () => {
+  const { activeWorld, currentTheme, quality, setQuality, reducedMotion, setReducedMotion } = useTheme();
+  const [controlsOpen, setControlsOpen] = useState(false);
 
-export const Navbar: React.FC<NavbarProps> = ({ onOpenPrivacy }) => {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState('hero');
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-
-      const sections = ['hero', 'brands', 'featured', 'about', 'contact'];
-      const scrollPosition = window.scrollY + 200;
-
-      for (const section of sections) {
-        const el = document.getElementById(section);
-        if (el) {
-          const top = el.offsetTop;
-          const height = el.offsetHeight;
-          if (scrollPosition >= top && scrollPosition < top + height) {
-            setActiveSection(section);
-            break;
-          }
-        }
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const navLinks = [
-    { label: 'Home', href: '#hero' },
-    { label: 'Our Brands', href: '#brands' },
-    { label: 'Featured', href: '#featured' },
-    { label: 'About', href: '#about' },
-    { label: 'Contact', href: '#contact' },
+  const navItems: Array<{ id: WorldId; label: string; number: string }> = [
+    { id: 'xl-over-3-0', label: 'XL OVER 3.0', number: '01' },
+    { id: 'zoya-noor', label: 'ZOYA NOOR', number: '02' },
+    { id: 'roohani-noorani', label: 'ROOHANI NOORANI', number: '03' },
   ];
 
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    e.preventDefault();
-    const targetId = href.replace('#', '');
-    const element = document.getElementById(targetId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+  const scrollToWorld = (id: WorldId) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
     }
-    setMobileMenuOpen(false);
   };
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? 'bg-[#07060B]/80 backdrop-blur-md border-b border-[#A855F7]/15 py-4 shadow-lg shadow-purple-950/20'
-          : 'bg-transparent py-6'
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-6 sm:px-8 flex items-center justify-between">
-        {/* Brand Wordmark */}
-        <a
-          href="#hero"
-          onClick={(e) => handleNavClick(e, '#hero')}
-          className="group flex items-center space-x-2 text-xl font-bold tracking-wider text-white"
+    <header className="fixed top-0 left-0 right-0 z-40 px-4 sm:px-8 py-3.5 select-none pointer-events-none">
+      <div className="max-w-7xl mx-auto flex items-center justify-between">
+        {/* Brand Face Logo + Name */}
+        <div
+          onClick={() => scrollToWorld('xl-over-3-0')}
+          className="pointer-events-auto flex items-center gap-3 px-3.5 py-2 rounded-2xl bg-[#05030B]/70 border border-white/10 backdrop-blur-xl shadow-lg cursor-pointer hover:border-white/30 transition-all duration-300 group"
+          role="button"
+          tabIndex={0}
+          aria-label="Go to XL OVER 3.0"
         >
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#A855F7] to-[#D8B4FE] flex items-center justify-center p-0.5 shadow-md shadow-purple-500/30 group-hover:scale-105 transition-transform duration-300">
-            <div className="w-full h-full bg-[#07060B] rounded-[6px] flex items-center justify-center">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-white font-black text-sm">XL</span>
-            </div>
+          <div className="w-8 h-8 rounded-full overflow-hidden border border-white/20 group-hover:scale-105 transition-transform">
+            <img
+              src="./logo icon.png"
+              alt="XL OVER 3.0 Logo"
+              className="w-full h-full object-cover"
+            />
           </div>
-          <span className="font-extrabold tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-white via-purple-100 to-purple-300 group-hover:to-purple-400 transition-colors">
-            XL <span className="text-[#A855F7] text-sm font-light">over 3.0</span>
-          </span>
-        </a>
+          <div className="flex flex-col">
+            <span className="text-xs font-extrabold tracking-wider text-white">XL OVER 3.0</span>
+            <span className="text-[9px] font-mono tracking-widest text-slate-400">2036 EDITION</span>
+          </div>
+        </div>
 
-        {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center space-x-1 bg-[#100A1B]/60 backdrop-blur-md px-4 py-1.5 rounded-full border border-purple-500/20">
-          {navLinks.map((link) => {
-            const isActive = activeSection === link.href.replace('#', '');
+        {/* Center Liquid Glass Navigation for 3 Worlds */}
+        <nav
+          className="pointer-events-auto hidden md:flex items-center gap-1.5 p-1.5 rounded-full bg-[#05030B]/75 border border-white/10 backdrop-blur-2xl shadow-[0_8px_32px_0_rgba(0,0,0,0.5)]"
+          aria-label="Universe identities navigation"
+        >
+          {navItems.map((item) => {
+            const isActive = activeWorld === item.id;
             return (
-              <a
-                key={link.label}
-                href={link.href}
-                onClick={(e) => handleNavClick(e, link.href)}
-                className={`px-4 py-2 text-sm font-medium rounded-full transition-all duration-200 ${
+              <button
+                key={item.id}
+                onClick={() => scrollToWorld(item.id)}
+                className={`relative px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider transition-all duration-300 cursor-pointer flex items-center gap-2 ${
                   isActive
-                    ? 'text-white bg-[#A855F7]/20 border border-[#A855F7]/40 shadow-sm shadow-purple-500/30'
-                    : 'text-[#B8B0C8] hover:text-white hover:bg-white/5'
+                    ? 'text-white shadow-lg'
+                    : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.04]'
                 }`}
+                style={{
+                  background: isActive ? currentTheme.colors.secondary : 'transparent',
+                }}
+                aria-current={isActive ? 'page' : undefined}
               >
-                {link.label}
-              </a>
+                <span className="text-[10px] opacity-70 font-mono">{item.number}</span>
+                <span>{item.label}</span>
+                {isActive && <Sparkles className="w-3 h-3 text-white animate-pulse" />}
+              </button>
             );
           })}
         </nav>
 
-        {/* CTA in Navbar */}
-        <div className="hidden md:flex items-center space-x-4">
-          <a
-            href="#contact"
-            onClick={(e) => handleNavClick(e, '#contact')}
-            className="text-xs uppercase tracking-widest font-semibold px-4 py-2.5 rounded-full bg-gradient-to-r from-[#A855F7] to-purple-600 text-white shadow-lg shadow-purple-600/30 hover:shadow-purple-500/50 hover:scale-105 active:scale-95 transition-all duration-200 border border-purple-400/30 flex items-center space-x-1.5"
+        {/* Right Settings & Quality Controls Toggle */}
+        <div className="pointer-events-auto relative">
+          <button
+            onClick={() => setControlsOpen((prev) => !prev)}
+            className="p-2.5 rounded-2xl bg-[#05030B]/70 border border-white/10 backdrop-blur-xl text-slate-300 hover:text-white hover:border-white/30 transition-all cursor-pointer shadow-lg flex items-center gap-2 text-xs"
+            aria-label="Settings and Performance Controls"
           >
-            <Sparkles className="w-3.5 h-3.5 text-purple-200" />
-            <span>Connect</span>
-          </a>
-        </div>
+            <Sliders className="w-4 h-4 text-[#B66BFF]" />
+            <span className="hidden sm:inline font-mono uppercase text-[10px] tracking-wider">
+              {quality}
+            </span>
+          </button>
 
-        {/* Mobile menu toggle */}
-        <button
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden p-2.5 text-[#B8B0C8] hover:text-white focus:outline-none focus:ring-2 focus:ring-[#A855F7] rounded-lg bg-white/5"
-          aria-label="Toggle Navigation Menu"
-        >
-          {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </button>
+          {/* Settings Dropdown Panel */}
+          {controlsOpen && (
+            <div className="absolute right-0 mt-2 w-56 p-4 rounded-2xl bg-[#05030B]/90 border border-white/15 backdrop-blur-2xl shadow-2xl flex flex-col gap-3 z-50">
+              <div className="text-[10px] font-mono uppercase tracking-widest text-slate-400 pb-1 border-b border-white/10">
+                Visual & Performance
+              </div>
+
+              {/* Quality mode buttons */}
+              <div className="flex flex-col gap-1">
+                <span className="text-xs text-slate-300 font-medium">Particle Density:</span>
+                <div className="grid grid-cols-3 gap-1 mt-1">
+                  {(['low', 'medium', 'high'] as const).map((q) => (
+                    <button
+                      key={q}
+                      onClick={() => setQuality(q)}
+                      className={`py-1 rounded-lg text-[10px] font-mono uppercase transition-all cursor-pointer ${
+                        quality === q
+                          ? 'bg-[#8B35FF] text-white font-bold'
+                          : 'bg-white/5 text-slate-400 hover:bg-white/10'
+                      }`}
+                    >
+                      {q}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Reduced motion toggle */}
+              <div className="flex items-center justify-between pt-2 border-t border-white/10">
+                <span className="text-xs text-slate-300">Reduced Motion:</span>
+                <button
+                  onClick={() => setReducedMotion(!reducedMotion)}
+                  className={`p-1.5 rounded-lg text-xs cursor-pointer ${
+                    reducedMotion ? 'bg-emerald-500/30 text-emerald-300' : 'bg-white/5 text-slate-400'
+                  }`}
+                  aria-label="Toggle reduced motion"
+                >
+                  {reducedMotion ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
 
-      {/* Mobile Drawer */}
-      {mobileMenuOpen && (
-        <div className="md:hidden bg-[#07060B]/95 backdrop-blur-xl border-b border-purple-500/20 px-6 py-6 space-y-3 transition-all animate-in slide-in-from-top-4">
-          {navLinks.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              onClick={(e) => handleNavClick(e, link.href)}
-              className="block py-3 px-4 rounded-xl text-base font-medium text-[#F5F3FA] hover:bg-[#A855F7]/10 hover:text-[#D8B4FE] transition-colors"
-            >
-              {link.label}
-            </a>
-          ))}
-          <div className="pt-4 border-t border-purple-900/40 flex items-center justify-between">
-            <button
-              onClick={() => {
-                setMobileMenuOpen(false);
-                onOpenPrivacy();
-              }}
-              className="text-xs text-[#B8B0C8] hover:text-white underline"
-            >
-              Privacy Policy
-            </button>
-            <a
-              href="#contact"
-              onClick={(e) => handleNavClick(e, '#contact')}
-              className="text-xs uppercase tracking-wider font-semibold px-4 py-2 rounded-full bg-[#A855F7] text-white"
-            >
-              Get in Touch
-            </a>
-          </div>
+      {/* Mobile Floating Bottom Bar for switching worlds */}
+      <div className="md:hidden fixed bottom-4 left-4 right-4 z-40 pointer-events-auto">
+        <div className="flex items-center justify-around p-1.5 rounded-2xl bg-[#05030B]/85 border border-white/15 backdrop-blur-2xl shadow-2xl">
+          {navItems.map((item) => {
+            const isActive = activeWorld === item.id;
+            return (
+              <button
+                key={item.id}
+                onClick={() => scrollToWorld(item.id)}
+                className={`flex-1 py-2 rounded-xl text-[10px] font-bold tracking-wider uppercase transition-all text-center cursor-pointer ${
+                  isActive ? 'text-white' : 'text-slate-400'
+                }`}
+                style={{
+                  background: isActive ? currentTheme.colors.secondary : 'transparent',
+                }}
+              >
+                {item.label.split(' ')[0]}
+              </button>
+            );
+          })}
         </div>
-      )}
+      </div>
     </header>
   );
 };
+
+export default Navbar;
